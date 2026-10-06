@@ -17,6 +17,9 @@ jobs:
           cmake --version
           python3 --version
 
+      - name: Run host regression tests with sanitizers
+        run: bash ports/ios/scripts/build.sh test
+
       - name: Configure iOS 16.1 project
         env:
           KISAK_IOS_MIN_VERSION: "16.1"
@@ -31,6 +34,7 @@ jobs:
             -sdk iphoneos \
             -jobs 2 \
             CODE_SIGNING_ALLOWED=NO \
+            CLANG_WARN_UNGUARDED_AVAILABILITY=YES_ERROR \
             build
 
       - name: Package unsigned IPA
