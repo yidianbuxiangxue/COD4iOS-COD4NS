@@ -115,9 +115,24 @@ MTLPixelFormat StorageFormat(Format format, bool bcSupported)
     case Format::RG16F: return MTLPixelFormatRG16Float;
     case Format::RGBA16F: return MTLPixelFormatRGBA16Float;
     case Format::RGBA32F: return MTLPixelFormatRGBA32Float;
-    case Format::DXT1: return bcSupported ? MTLPixelFormatBC1_RGBA : MTLPixelFormatRGBA8Unorm;
-    case Format::DXT3: return bcSupported ? MTLPixelFormatBC2_RGBA : MTLPixelFormatRGBA8Unorm;
-    case Format::DXT5: return bcSupported ? MTLPixelFormatBC3_RGBA : MTLPixelFormatRGBA8Unorm;
+    case Format::DXT1:
+    case Format::DXT3:
+    case Format::DXT5:
+#if TARGET_OS_IPHONE
+        // Both the capability query and the BC pixel-format constants are
+        // iOS 16.4 additions.  Older systems always use the RGBA software
+        // decoder, even on hardware that can decode BC textures.
+        if (@available(iOS 16.4, *))
+#endif
+        {
+            if (bcSupported)
+            {
+                if (format == Format::DXT1) return MTLPixelFormatBC1_RGBA;
+                if (format == Format::DXT3) return MTLPixelFormatBC2_RGBA;
+                return MTLPixelFormatBC3_RGBA;
+            }
+        }
+        return MTLPixelFormatRGBA8Unorm;
     case Format::D24S8: return MTLPixelFormatDepth32Float_Stencil8;
     case Format::D16:
     case Format::D32F: return MTLPixelFormatDepth32Float;

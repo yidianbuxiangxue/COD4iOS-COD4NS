@@ -19,6 +19,7 @@
   <key>UIRequiredDeviceCapabilities</key><array><string>arm64</string><string>metal</string></array>
   <key>UILaunchScreen</key><dict/>
   <key>UIUserInterfaceStyle</key><string>Dark</string>
+  <key>UIRequiresFullScreen</key><true/>
   <key>UISupportedInterfaceOrientations</key>
   <array><string>UIInterfaceOrientationLandscapeLeft</string><string>UIInterfaceOrientationLandscapeRight</string></array>
   <key>UISupportedInterfaceOrientations~ipad</key>
