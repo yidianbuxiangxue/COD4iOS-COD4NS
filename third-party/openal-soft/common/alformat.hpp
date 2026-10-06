@@ -5,10 +5,14 @@
 #include <AvailabilityMacros.h>
 #endif
 
-/* On macOS, std::format requires std::to_chars, which isn't available prior
- * to macOS 13.3. Older versions of libstdc++ also lack the <format> header.
+/* On Apple platforms, std::format requires floating-point std::to_chars,
+ * which isn't available prior to macOS 13.3 / iOS 16.3. Older versions of
+ * libstdc++ also lack the <format> header.
  */
 #if (defined(MAC_OS_X_VERSION_MIN_REQUIRED) && MAC_OS_X_VERSION_MIN_REQUIRED < 130300) \
+    || (defined(__IPHONE_OS_VERSION_MIN_REQUIRED) && __IPHONE_OS_VERSION_MIN_REQUIRED < 160300) \
+    || (defined(__ENVIRONMENT_IPHONE_OS_VERSION_MIN_REQUIRED__) \
+        && __ENVIRONMENT_IPHONE_OS_VERSION_MIN_REQUIRED__ < 160300) \
     || !__has_include(<format>)
 #include "fmt/format.h"
 

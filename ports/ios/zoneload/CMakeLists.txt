@@ -22,3 +22,4 @@ target_include_directories(kisakcod_zoneload PUBLIC
     "${CMAKE_CURRENT_LIST_DIR}/oat/Utils"
     "${CMAKE_CURRENT_LIST_DIR}/bridge"
 )
+target_include_directories(kisakcod_zoneload PRIVATE "${openal_SOURCE_DIR}/fmt-11.2.0/include")

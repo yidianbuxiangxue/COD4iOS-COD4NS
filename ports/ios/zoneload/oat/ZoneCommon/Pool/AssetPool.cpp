@@ -3,7 +3,6 @@
 #include "GlobalAssetPool.h"
 
 #include <cassert>
-#include <format>
 
 AssetPool::Iterator::Iterator(std::unordered_map<std::string, XAssetInfoGeneric*>::iterator i)
     : m_iterator(std::move(i))
@@ -173,7 +172,7 @@ XAssetInfoGeneric* ZoneAssetPools::GetAssetOrAssetReference(const asset_type_t t
     if (result != nullptr || (!name.empty() && name[0] == ','))
         return result;
 
-    result = GetAsset(type, std::format(",{}", name));
+    result = GetAsset(type, "," + name);
     return result;
 }
 

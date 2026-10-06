@@ -122,6 +122,7 @@ add_library(kisakcod_metal STATIC
     "${CMAKE_CURRENT_LIST_DIR}/../d3d9/metal/metal_backend.mm"
 )
 target_compile_features(kisakcod_metal PRIVATE cxx_std_20)
+target_include_directories(kisakcod_metal PRIVATE "${openal_SOURCE_DIR}/fmt-11.2.0/include")
 target_compile_options(kisakcod_metal PRIVATE $<$<COMPILE_LANGUAGE:OBJCXX>:-fobjc-arc>)
 # The COMPILE_LANGUAGE generator expression above is ignored by the Xcode generator, so the
 # device build compiled this target without ARC: every id store silently skipped its retain

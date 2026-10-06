@@ -16,13 +16,37 @@
 
 extern "C" NSString *const KisakEngineModeKey = @"KisakEngineMode";
 
+static void KISConfigureLauncherLog(void)
+{
+    NSArray<NSString *> *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documents = paths.firstObject;
+    if (!documents)
+        return;
+
+    NSString *logPath = [documents stringByAppendingPathComponent:@"cod4ios-launch.log"];
+    if (!freopen(logPath.fileSystemRepresentation, "a", stderr))
+        return;
+    setvbuf(stderr, NULL, _IONBF, 0);
+
+    NSDateFormatter *formatter = [NSDateFormatter new];
+    formatter.locale = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"];
+    formatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ssZZZZZ";
+    fprintf(stderr, "\n[%s] COD4iOS launcher start; OS=%s; bundle=%s\n",
+        [formatter stringFromDate:NSDate.date].UTF8String,
+        NSProcessInfo.processInfo.operatingSystemVersionString.UTF8String,
+        NSBundle.mainBundle.bundlePath.fileSystemRepresentation);
+}
+
 int main(int argc, char *argv[])
 {
     @autoreleasepool {
+        KISConfigureLauncherLog();
         NSString *mode = [NSUserDefaults.standardUserDefaults stringForKey:KisakEngineModeKey];
         const BOOL multiplayer = ![mode isEqualToString:@"sp"];
         NSString *name = multiplayer ? @"libkisakcod_mp.dylib" : @"libkisakcod_sp.dylib";
         NSString *path = [NSBundle.mainBundle.privateFrameworksPath stringByAppendingPathComponent:name];
+        fprintf(stderr, "KisakCOD: selected mode=%s; engine=%s; path=%s\n",
+            multiplayer ? "mp" : "sp", name.UTF8String, path.fileSystemRepresentation);
 
         void *image = dlopen(path.fileSystemRepresentation, RTLD_NOW | RTLD_LOCAL);
         if (!image) {

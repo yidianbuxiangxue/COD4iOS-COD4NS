@@ -1,6 +1,6 @@
 #include "InvalidLookupPositionException.h"
 
-#include <format>
+#include <string>
 
 InvalidLookupPositionException::InvalidLookupPositionException(const block_t block, const size_t offset)
     : m_block(block),
@@ -10,7 +10,8 @@ InvalidLookupPositionException::InvalidLookupPositionException(const block_t blo
 
 std::string InvalidLookupPositionException::DetailedMessage()
 {
-    return std::format("Zone tried to lookup at block {}, offset {} that was not recorded", m_block, m_offset);
+    return "Zone tried to lookup at block " + std::to_string(m_block) + ", offset "
+        + std::to_string(m_offset) + " that was not recorded";
 }
 
 char const* InvalidLookupPositionException::what() const noexcept

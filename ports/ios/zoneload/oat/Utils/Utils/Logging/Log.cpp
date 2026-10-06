@@ -1,6 +1,5 @@
 #include "Log.h"
 
-#include <format>
 #include <iostream>
 
 #ifdef _WIN32
@@ -91,32 +90,32 @@ namespace con
     void _debug_internal(const std::string& str)
     {
         if (globalUseColor)
-            std::cout << std::format("\x1B[90m{}\x1B[0m\n", str);
+            std::cout << "\x1B[90m" << str << "\x1B[0m\n";
         else
-            std::cout << std::format("{}\n", str);
+            std::cout << str << '\n';
     }
 
     void _info_internal(const std::string& str)
     {
         if (globalUseColor)
-            std::cout << std::format("\x1B[37m{}\x1B[0m\n", str);
+            std::cout << "\x1B[37m" << str << "\x1B[0m\n";
         else
-            std::cout << std::format("{}\n", str);
+            std::cout << str << '\n';
     }
 
     void _warn_internal(const std::string& str)
     {
         if (globalUseColor)
-            std::cout << std::format("\x1B[33mWARN: {}\x1B[0m\n", str);
+            std::cout << "\x1B[33mWARN: " << str << "\x1B[0m\n";
         else
-            std::cout << std::format("WARN: {}\n", str);
+            std::cout << "WARN: " << str << '\n';
     }
 
     void _error_internal(const std::string& str)
     {
         if (globalUseColor)
-            std::cerr << std::format("\x1B[31mERROR: {}\x1B[0m\n", str);
+            std::cerr << "\x1B[31mERROR: " << str << "\x1B[0m\n";
         else
-            std::cerr << std::format("ERROR: {}\n", str);
+            std::cerr << "ERROR: " << str << '\n';
     }
 } // namespace con

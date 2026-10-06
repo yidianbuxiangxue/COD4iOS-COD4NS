@@ -2,12 +2,13 @@
 
 #include <algorithm>
 #include <array>
-#include <charconv>
 #include <cstdio>
 #include <cstring>
 #include <limits>
 #include <map>
 #include <set>
+
+#include <fmt/format.h>
 
 namespace kisak::metal {
 
@@ -74,9 +75,7 @@ std::string FloatLiteral(float value)
         return "INFINITY";
     if (value == -std::numeric_limits<float>::infinity())
         return "(-INFINITY)";
-    char buffer[64];
-    const auto result = std::to_chars(buffer, buffer + sizeof(buffer), value, std::chars_format::general, 9);
-    std::string text(buffer, result.ptr);
+    std::string text = fmt::format("{:.9g}", value);
     if (text.find_first_of(".e") == std::string::npos)
         text += ".0";
     return text;

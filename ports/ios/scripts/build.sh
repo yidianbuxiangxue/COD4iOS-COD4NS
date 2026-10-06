@@ -4,8 +4,9 @@ set -euo pipefail
 repo_root="$(cd "$(dirname "$0")/../../.." && pwd)"
 build_root="${KISAK_BUILD_ROOT:-$repo_root/build/ios}"
 action="${1:-configure}"
-# std::format (used by the engine) needs std::to_chars: iOS 16.3 or later.
-deployment_target="${KISAK_IOS_MIN_VERSION:-17.0}"
+# iPadOS 16.1 is the compatibility floor. Platform code and third-party
+# formatting use local fallbacks rather than importing newer libc++ symbols.
+deployment_target="${KISAK_IOS_MIN_VERSION:-16.1}"
 
 configure_apple() {
     local sdk="$1"

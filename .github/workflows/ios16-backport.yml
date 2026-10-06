@@ -1,0 +1,57 @@
+name: iOS 16.1 backport build
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: xcode-27
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Toolchain versions
+        run: |
+          xcodebuild -version
+          xcrun --sdk iphoneos --show-sdk-version
+          cmake --version
+          python3 --version
+
+      - name: Configure iOS 16.1 project
+        env:
+          KISAK_IOS_MIN_VERSION: "16.1"
+        run: bash tools/configure-ios.sh
+
+      - name: Build unsigned combined app
+        run: |
+          xcodebuild \
+            -project build/ios/xcode-engine/KisakCOD.xcodeproj \
+            -target KisakCOD-Combined \
+            -configuration Release \
+            -sdk iphoneos \
+            -jobs 2 \
+            CODE_SIGNING_ALLOWED=NO \
+            build
+
+      - name: Package unsigned IPA
+        run: |
+          python3 tools/package-public-playtest.py \
+            --app build/ios/xcode-engine/ports/ios/Release-iphoneos/KisakCOD.app \
+            --source-root "$PWD" \
+            --output release/public
+
+      - name: Audit iOS 16.1 artifacts
+        env:
+          KISAK_IOS_MIN_VERSION: "16.1"
+        run: bash ports/ios/scripts/audit_ipa.sh release/public/COD4iOS-playtest-unsigned.ipa
+
+      - name: Upload IPA and reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: COD4iOS-iPadOS-16.1-backport
+          path: |
+            release/public/COD4iOS-playtest-unsigned.ipa
+            release/public/*.txt
+            release/public/*.json
+          if-no-files-found: error
+          retention-days: 14

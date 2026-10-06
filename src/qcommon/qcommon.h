@@ -7,7 +7,6 @@
 
 #include <cstdint>
 #include <iostream>
-#include <format>
 
 #include "../universal/q_shared.h"
 

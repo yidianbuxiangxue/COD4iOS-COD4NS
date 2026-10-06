@@ -2,7 +2,7 @@
 
 #include <atomic>
 #include <cstdint>
-#include <format>
+#include <fmt/format.h>
 #include <string>
 
 namespace con
@@ -39,11 +39,11 @@ namespace con
         _debug_internal(str);
     }
 
-    template<class Arg0, class... OtherArgs> void debug(std::format_string<Arg0, OtherArgs...> fmt, Arg0&& arg0, OtherArgs&&... otherArgs)
+    template<class Arg0, class... OtherArgs> void debug(fmt::format_string<Arg0, OtherArgs...> fmt, Arg0&& arg0, OtherArgs&&... otherArgs)
     {
         if (static_cast<unsigned>(_globalLogLevel) > static_cast<unsigned>(LogLevel::DEBUG))
             return;
-        _debug_internal(std::vformat(fmt.get(), std::make_format_args(arg0, otherArgs...)));
+        _debug_internal(fmt::vformat(fmt.get(), fmt::make_format_args(arg0, otherArgs...)));
     }
 
     inline void info(const std::string& str)
@@ -53,11 +53,11 @@ namespace con
         _info_internal(str);
     }
 
-    template<class Arg0, class... OtherArgs> void info(std::format_string<Arg0, OtherArgs...> fmt, Arg0&& arg0, OtherArgs&&... otherArgs)
+    template<class Arg0, class... OtherArgs> void info(fmt::format_string<Arg0, OtherArgs...> fmt, Arg0&& arg0, OtherArgs&&... otherArgs)
     {
         if (static_cast<unsigned>(_globalLogLevel) > static_cast<unsigned>(LogLevel::INFO))
             return;
-        _info_internal(std::vformat(fmt.get(), std::make_format_args(arg0, otherArgs...)));
+        _info_internal(fmt::vformat(fmt.get(), fmt::make_format_args(arg0, otherArgs...)));
     }
 
     inline void warn(const std::string& str)
@@ -68,12 +68,12 @@ namespace con
         _warn_internal(str);
     }
 
-    template<class Arg0, class... OtherArgs> void warn(std::format_string<Arg0, OtherArgs...> fmt, Arg0&& arg0, OtherArgs&&... otherArgs)
+    template<class Arg0, class... OtherArgs> void warn(fmt::format_string<Arg0, OtherArgs...> fmt, Arg0&& arg0, OtherArgs&&... otherArgs)
     {
         ++_warningCount;
         if (static_cast<unsigned>(_globalLogLevel) > static_cast<unsigned>(LogLevel::WARN))
             return;
-        _warn_internal(std::vformat(fmt.get(), std::make_format_args(arg0, otherArgs...)));
+        _warn_internal(fmt::vformat(fmt.get(), fmt::make_format_args(arg0, otherArgs...)));
     }
 
     inline void error(const std::string& str)
@@ -82,9 +82,9 @@ namespace con
         _error_internal(str);
     }
 
-    template<class Arg0, class... OtherArgs> void error(std::format_string<Arg0, OtherArgs...> fmt, Arg0&& arg0, OtherArgs&&... otherArgs)
+    template<class Arg0, class... OtherArgs> void error(fmt::format_string<Arg0, OtherArgs...> fmt, Arg0&& arg0, OtherArgs&&... otherArgs)
     {
         ++_errorCount;
-        _error_internal(std::vformat(fmt.get(), std::make_format_args(arg0, otherArgs...)));
+        _error_internal(fmt::vformat(fmt.get(), fmt::make_format_args(arg0, otherArgs...)));
     }
 } // namespace con
